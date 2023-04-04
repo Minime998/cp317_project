@@ -46,7 +46,6 @@ class ingredient:
                 self.amount /= 28.3495
                 self.amount = self.amount / density
             
-
             case _:
                 print("This ingredient does not have a valid unit.")
 
@@ -58,19 +57,20 @@ class ingredient:
         Mutates the ingredient amount to be in grams
         density: g/ml
         """
+        #note from katrina: i found these conversions on https://www.inchcalculator.com idk how to verify if they accurate lol
         match self.unit:
             case "mL":
-
+                self.amount = self.amount * density
             case "L":
-            
+                self.amount = self.amount * density * 100
             case "c":
-            
-            case "tbs.":
-
+                #idk what c is
+            case "tbsp.":
+                self.amount = self.amount * density * 14.787
             case "tsp":
-            
+                self.amount = self.amount * density * 4.928922
             case "fl. oz.":
-            
+                self.amount = self.amount * density * 29.57353
             case _:
                 print("This ingredient does not have a valid unit.")
       
