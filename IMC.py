@@ -7,12 +7,12 @@ VOLUME = {"mL", "L", "c", "tbs.", "tsp", "fl. oz."}
 
 
 class ingredient:
-    def __init__(self, name, amount, unit):
+    def __init__(self, name: str, amount: int, unit: str):
         """ingredient class
         used to handle the multiple attributes of each ingredient
 
         :str | Any name: ingredient name
-        :str | Any amount: amount of ingredient
+        :int | Any amount: amount of ingredient
         :str | Any unit: unit of set amount for the ingredient
         """
         self.name = name
@@ -26,29 +26,33 @@ class ingredient:
         """
         Mutates the ingredient amount to be in ml
 
-        :ingreditent
+        :ingredient
         :density | in g/ml
         """
 
         match self.unit:
             case "g":
                 self.amount = self.amount / density
-            
+
             case "lb":
                 self.amount /= 454
                 self.amount = self.amount / density
-            
+
             case "kg":
                 self.amount /= 1000
                 self.amount = self.amount / density
-            
+
             case "oz.":
                 self.amount /= 28.3495
                 self.amount = self.amount / density
-            
-            case _:
-                print("This ingredient does not have a valid unit.")
 
+            case _:
+                print(self.name + """
+                ingredient is already in a volumetric unit,
+                or does not have a valid unit
+                within this application.""")
+
+        print("Conversion completed. The ingredient units have been adjusted.")
 
         return None
 
@@ -57,14 +61,14 @@ class ingredient:
         Mutates the ingredient amount to be in grams
         density: g/ml
         """
-        #note from katrina: i found these conversions on https://www.inchcalculator.com idk how to verify if they accurate lol
+
         match self.unit:
-            case "mL":
+            case "ml":
                 self.amount = self.amount * density
             case "L":
                 self.amount = self.amount * density * 100
             case "c":
-                #idk what c is
+                self.amount = self.amount * 0.004227
             case "tbsp.":
                 self.amount = self.amount * density * 14.787
             case "tsp":
@@ -72,21 +76,24 @@ class ingredient:
             case "fl. oz.":
                 self.amount = self.amount * density * 29.57353
             case _:
-                print("This ingredient does not have a valid unit.")
-      
+                print(self.name + """
+                ingredient is already in a volumetric unit,
+                or does not have a valid unit
+                within this application.""")
+
+        print("Conversion completed. The ingredient units have been adjusted.")
+
         return None
 
 
-def IMC():
+def IMC(recipe: list[ingredient]):
     """
     Returns the volume of the ingredient
     If the units are a weight measurement, a conversion is made
     :return: None
     """
-
-    recipe = userRecipe()
-
-    print(recipe[0].name, recipe[0].amount, recipe[0].unit)
+    if recipe == []:
+        recipe = userRecipe()
 
     conversion = input('''
     Do you have any ingredients you would like to
@@ -94,20 +101,22 @@ def IMC():
     ''')
 
     if conversion.upper() == "Y":
-        conversionType = input('''
+        conversionType = int(input('''
     Enter (1) for Volume to Weight conversions,
     Enter (2) for Weight to Volume conversions
-    ''')
+    '''))
         if conversionType == 1:
             items = range(len(recipe))
             for x in items:
-                density = int(input("Enter in {}'s density in grams").format(recipe[x].name))
+                density = int(input("""
+                Enter in """ + recipe[x].name + """ density in grams: """))
                 recipe[x].volumeToWeight(density)
 
         if conversionType == 2:
             items = range(len(recipe))
             for x in items:
-                density = int(input("Enter in {}'s density in grams").format(recipe[x].name))
+                density = int(input("""
+                Enter in """ + recipe[x].name + """ density in grams: """))
                 recipe[x].weightToVolume(density)
 
     diffAmount = input('''
@@ -117,7 +126,12 @@ def IMC():
 
     if diffAmount.upper() == "Y":
         scaleMeasurements(recipe)
-    
+
+    items = range(len(recipe))
+
+    for x in items:
+        print(recipe[x].name, recipe[x].amount, recipe[x].unit)
+
     return None
 
 
@@ -148,7 +162,7 @@ def userRecipe() -> list[ingredient]:
         if match:
             unitsAmounts = match.groups()
 
-        recipe.append(ingredient(lineList[0].lower(), unitsAmounts[0],
+        recipe.append(ingredient(lineList[0].lower(), int(unitsAmounts[0]),
                                  unitsAmounts[1]))
 
     return recipe
@@ -165,7 +179,7 @@ def scaleMeasurements(recipe: list[ingredient]):
     Enter the ingredient you have the least
     amount of (in regards to the recipe): ''')
 
-    leastIngredientAmt = input("Enter the amount you have: ")
+    leastIngredientAmt = int(input("Enter the amount you have: "))
 
     items = range(len(recipe))
     scale = 0
@@ -176,8 +190,12 @@ def scaleMeasurements(recipe: list[ingredient]):
 
     for x in items:
         recipe[x].amount = recipe[x].amount * scale
-    
+
+    print("Scaling completed. All ingredient measurements have been adjusted.")
+
     return None
 
 
-IMC()
+run = input("Do you want to run the MC? (Y/N): ")
+if run == "Y":
+    IMC(recipe=[])
