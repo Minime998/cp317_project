@@ -27,18 +27,22 @@ class ingredient:
         match self.unit:
             case "g":
                 self.amount = self.amount / density
+                self.unit = "ml"
 
             case "lb":
                 self.amount /= 454
                 self.amount = self.amount / density
+                self.unit = "ml"
 
             case "kg":
                 self.amount /= 1000
                 self.amount = self.amount / density
+                self.unit = "ml"
 
             case "oz.":
                 self.amount /= 28.3495
                 self.amount = self.amount / density
+                self.unit = "ml"
 
             case _:
                 print(self.name + """
@@ -59,16 +63,22 @@ class ingredient:
         match self.unit:
             case "ml":
                 self.amount = self.amount * density
+                self.unit = "g"
             case "L":
                 self.amount = self.amount * density * 100
+                self.unit = "g"
             case "c":
                 self.amount = self.amount * 0.004227
+                self.unit = "g"
             case "tbsp.":
                 self.amount = self.amount * density * 14.787
+                self.unit = "g"
             case "tsp":
                 self.amount = self.amount * density * 4.928922
+                self.unit = "g"
             case "fl. oz.":
                 self.amount = self.amount * density * 29.57353
+                self.unit = "g"
             case _:
                 print(self.name + """
                 ingredient is already in a volumetric unit,
@@ -190,11 +200,3 @@ def scaleMeasurements(recipe: list[ingredient]):
     print("Scaling completed. All ingredient measurements have been adjusted.")
 
     return None
-
-
-while True:
-    run = input("Do you want to run the MC? (Y/N): ")
-    if run == "Y":
-        IMC(recipe=[])
-    else:
-        break
