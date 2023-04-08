@@ -3,7 +3,6 @@ import re
 # unit index
 WEIGHT = {"g", "lb", "kg" "oz."}
 VOLUME = {"mL", "L", "c", "tbs.", "tsp", "fl. oz."}
-# make the conversion formulas
 
 
 class ingredient:
@@ -11,23 +10,18 @@ class ingredient:
         """ingredient class
         used to handle the multiple attributes of each ingredient
 
-        :str | Any name: ingredient name
-        :int | Any amount: amount of ingredient
-        :str | Any unit: unit of set amount for the ingredient
+        :str name: ingredient name
+        :int amount: amount of ingredient
+        :str unit: unit of set amount for the ingredient
         """
         self.name = name
         self.amount = amount
         self.unit = unit
 
-    # index of ingredient weight to volume conversion
-    # For example, 1 cup of flour
-    # (volume measurement) = 120g flour (weight measurement)
     def weightToVolume(self, density: int):
-        """
+        """weightToVolume function
         Mutates the ingredient amount to be in ml
-
-        :ingredient
-        :density | in g/ml
+        :int density: density of ingredient in g/ml
         """
 
         match self.unit:
@@ -57,9 +51,9 @@ class ingredient:
         return None
 
     def volumeToWeight(self, density: int):
-        """
+        """volumeToWeight function
         Mutates the ingredient amount to be in grams
-        density: g/ml
+        :int density: g/ml
         """
 
         match self.unit:
@@ -87,9 +81,10 @@ class ingredient:
 
 
 def IMC(recipe: list[ingredient]):
-    """
+    """IMC function
     Returns the volume of the ingredient
     If the units are a weight measurement, a conversion is made
+    :list: list of ingredient objects
     :return: None
     """
     if recipe == []:
@@ -139,6 +134,7 @@ def userRecipe() -> list[ingredient]:
     """userRecipe function
     Used to get a recipe from the user for use in the IMC
     by storing all ingredients in a list
+    :return: list of ingredients
     """
 
     recipe = []
@@ -169,7 +165,7 @@ def userRecipe() -> list[ingredient]:
 
 
 def scaleMeasurements(recipe: list[ingredient]):
-    """
+    """scaleMeasurements function
     Returns the volume of the ingredient
     If the units are a weight measurement, a conversion is made
     :return: the volume of the ingredient
@@ -196,6 +192,9 @@ def scaleMeasurements(recipe: list[ingredient]):
     return None
 
 
-run = input("Do you want to run the MC? (Y/N): ")
-if run == "Y":
-    IMC(recipe=[])
+while True:
+    run = input("Do you want to run the MC? (Y/N): ")
+    if run == "Y":
+        IMC(recipe=[])
+    else:
+        break
